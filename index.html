@@ -615,6 +615,7 @@
 
 <script>
   const ADMIRAL_PASSWORD = "noRto2-hysfyr-gotxus";
+  const BACKEND_URL = "https://milc-backend-pc5q.onrender.com";
 
   const appFrame = document.getElementById("appFrame");
   const adminStatus = document.getElementById("adminStatus");
@@ -668,32 +669,49 @@
 
   let activeLangFilters = new Set();
 
-function saveData() {
-  const data = {
-    members,
-    nextId,
-    maxMembers,
-    clanLevel,
-    clanRank,
-    allianceBuffLevel
-  };
+  // ---- BACKEND PERSISTENCE ----
+  async function saveData() {
+    const data = {
+      members,
+      nextId,
+      maxMembers,
+      clanLevel,
+      clanRank,
+      allianceBuffLevel
+    };
 
-  localStorage.setItem("milcData", JSON.stringify(data));
-}
+    try {
+      await fetch(`${BACKEND_URL}/data`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    } catch (err) {
+      console.error("Error saving data to backend:", err);
+      alert("Warning: failed to save to server.");
+    }
+  }
 
-function loadData() {
-  const saved = localStorage.getItem("milcData");
-  if (!saved) return;
+  async function loadData() {
+    try {
+      const res = await fetch(`${BACKEND_URL}/data`);
+      if (!res.ok) {
+        console.warn("Backend returned non-OK status, using defaults.");
+        return;
+      }
+      const data = await res.json() || {};
 
-  const data = JSON.parse(saved);
-
-  members = data.members || [];
-  nextId = data.nextId || 1;
-  maxMembers = data.maxMembers || 0;
-  clanLevel = data.clanLevel || 12;
-  clanRank = data.clanRank || 12;
-  allianceBuffLevel = data.allianceBuffLevel || 25;
-}
+      members = Array.isArray(data.members) ? data.members : [];
+      nextId = data.nextId || 1;
+      maxMembers = data.maxMembers || 0;
+      clanLevel = data.clanLevel || 12;
+      clanRank = data.clanRank || 12;
+      allianceBuffLevel = data.allianceBuffLevel || 25;
+    } catch (err) {
+      console.error("Error loading data from backend:", err);
+      // If backend fails, we just keep defaults
+    }
+  }
 
   function enforceSingleAdmiral(newAdmiralName) {
     members.forEach(m => {
@@ -721,7 +739,6 @@ function loadData() {
       btnSignIn.style.display = "inline-flex";
       btnSignOut.style.display = "none";
     }
-    loadData();
     render();
   }
 
@@ -783,7 +800,7 @@ function loadData() {
     renderRoster();
   });
 
-  btnAddMember.addEventListener("click", () => {
+  btnAddMember.addEventListener("click", async () => {
     const name = (addName.value || "").trim();
     const power = parseInt(addPower.value, 10) || 0;
     const ops = parseInt(addOps.value, 10) || 0;
@@ -805,16 +822,16 @@ function loadData() {
     }
 
     members.push({
-  id: nextId++,
-  name,
-  power,
-  ops,
-  lang,
-  rank,
-  discord
-});
+      id: nextId++,
+      name,
+      power,
+      ops,
+      lang,
+      rank,
+      discord
+    });
 
-saveData();
+    await saveData();
 
     addName.value = "";
     addPower.value = "";
@@ -826,7 +843,7 @@ saveData();
     render();
   });
 
-  rosterBody.addEventListener("click", (e) => {
+  rosterBody.addEventListener("click", async (e) => {
     const btn = e.target;
     const row = btn.closest("tr");
     if (!row) return;
@@ -871,20 +888,20 @@ saveData();
       member.rank = newRank || member.rank;
       member.discord = newDiscord.trim();
 
-      saveData();
+      await saveData();
       render();
     }
 
     if (btn.classList.contains("btn-remove")) {
       if (confirm("Remove this member?")) {
         members = members.filter(m => m.id !== memberId);
-        saveData();
+        await saveData();
         render();
       }
     }
   });
 
-  btnSaveChanges.addEventListener("click", () => {
+  btnSaveChanges.addEventListener("click", async () => {
     const newClanLevel = parseInt(clanLevelInput.value, 10) || clanLevel;
     const newMaxMembers = parseInt(maxMembersInput.value, 10) || maxMembers;
     const newRank = parseInt(clanRankInput.value, 10) || clanRank;
@@ -901,7 +918,7 @@ saveData();
     clanRank = newRank;
     allianceBuffLevel = newBuff;
 
-    saveData();
+    await saveData();
 
     const now = new Date();
     const stardate = `Stardate ${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
@@ -980,10 +997,14 @@ saveData();
 
     renderRoster();
   }
-  
-  loadData();
-  render();
+
+  // Initial load from backend, then render
+  (async () => {
+    await loadData();
+    render();
+  })();
 </script>
+
 
 </body>
 </html>
