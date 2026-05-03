@@ -801,106 +801,114 @@
   });
 
   btnAddMember.addEventListener("click", async () => {
-    const name = (addName.value || "").trim();
-    const power = parseInt(addPower.value, 10) || 0;
-    const ops = parseInt(addOps.value, 10) || 0;
-    const lang = addLang.value || "EN";
-    const rank = addRank.value || "Agent";
-    const discord = (addDiscord.value || "").trim();
+  console.log("Add Member clicked");
 
-    if (!name) {
-      alert("Username is required.");
-      return;
-    }
-    if (power < 0 || ops < 0) {
-      alert("Power and Ops must be non-negative.");
-      return;
-    }
+  const name = (addName.value || "").trim();
+  const power = parseInt(addPower.value, 10) || 0;
+  const ops = parseInt(addOps.value, 10) || 0;
+  const lang = addLang.value || "EN";
+  const rank = addRank.value || "Agent";
+  const discord = (addDiscord.value || "").trim();
 
-    if (rank === "Admiral") {
-      enforceSingleAdmiral(name);
-    }
+  if (!name) {
+    alert("Username is required.");
+    return;
+  }
+  if (power < 0 || ops < 0) {
+    alert("Power and Ops must be non-negative.");
+    return;
+  }
 
-    members.push({
-      id: nextId++,
-      name,
-      power,
-      ops,
-      lang,
-      rank,
-      discord
-    });
+  if (rank === "Admiral") {
+    enforceSingleAdmiral(name);
+  }
 
-    await saveData();
-
-    addName.value = "";
-    addPower.value = "";
-    addOps.value = "";
-    addDiscord.value = "";
-    addLang.value = "EN";
-    addRank.value = "Agent";
-
-    render();
+  members.push({
+    id: nextId++,
+    name,
+    power,
+    ops,
+    lang,
+    rank,
+    discord
   });
 
-  rosterBody.addEventListener("click", async (e) => {
-    const btn = e.target;
-    const row = btn.closest("tr");
-    if (!row) return;
-    const memberId = parseInt(row.getAttribute("data-id"), 10);
-    const member = members.find(m => m.id === memberId);
-    if (!member) return;
+  console.log("Calling saveData()");
+  await saveData();
 
-    if (btn.classList.contains("btn-edit")) {
-      const newName = prompt("Username:", member.name);
-      if (newName === null) return;
+  addName.value = "";
+  addPower.value = "";
+  addOps.value = "";
+  addDiscord.value = "";
+  addLang.value = "EN";
+  addRank.value = "Agent";
 
-      const newPowerStr = prompt("Power:", member.power);
-      if (newPowerStr === null) return;
+  render();
+});
 
-      const newOpsStr = prompt("Ops:", member.ops);
-      if (newOpsStr === null) return;
 
-      const newLang = prompt("Lang (EN/FR/DE/ES):", member.lang);
-      if (newLang === null) return;
+// --- EDIT / REMOVE HANDLER ---
+rosterBody.addEventListener("click", async (e) => {
+  const btn = e.target;
+  const row = btn.closest("tr");
+  if (!row) return;
 
-      const newRank = prompt("Rank (Agent/Operative/Premier/Commodore/Admiral):", member.rank);
-      if (newRank === null) return;
+  const memberId = parseInt(row.getAttribute("data-id"), 10);
+  const member = members.find(m => m.id === memberId);
+  if (!member) return;
 
-      const newDiscord = prompt("Discord:", member.discord);
-      if (newDiscord === null) return;
+  // EDIT MEMBER
+  if (btn.classList.contains("btn-edit")) {
+    const newName = prompt("Username:", member.name);
+    if (newName === null) return;
 
-      const newPower = parseInt(newPowerStr, 10);
-      const newOps = parseInt(newOpsStr, 10);
-      if (isNaN(newPower) || isNaN(newOps)) {
-        alert("Power and Ops must be numbers.");
-        return;
-      }
+    const newPowerStr = prompt("Power:", member.power);
+    if (newPowerStr === null) return;
 
-      if (newRank === "Admiral") {
-        enforceSingleAdmiral(newName.trim());
-      }
+    const newOpsStr = prompt("Ops:", member.ops);
+    if (newOpsStr === null) return;
 
-      member.name = newName.trim() || member.name;
-      member.power = newPower;
-      member.ops = newOps;
-      member.lang = (newLang || member.lang).toUpperCase();
-      member.rank = newRank || member.rank;
-      member.discord = newDiscord.trim();
+    const newLang = prompt("Lang (EN/FR/DE/ES):", member.lang);
+    if (newLang === null) return;
 
+    const newRank = prompt("Rank (Agent/Operative/Premier/Commodore/Admiral):", member.rank);
+    if (newRank === null) return;
+
+    const newDiscord = prompt("Discord:", member.discord);
+    if (newDiscord === null) return;
+
+    const newPower = parseInt(newPowerStr, 10);
+    const newOps = parseInt(newOpsStr, 10);
+    if (isNaN(newPower) || isNaN(newOps)) {
+      alert("Power and Ops must be numbers.");
+      return;
+    }
+
+    if (newRank === "Admiral") {
+      enforceSingleAdmiral(newName.trim());
+    }
+
+    member.name = newName.trim() || member.name;
+    member.power = newPower;
+    member.ops = newOps;
+    member.lang = (newLang || member.lang).toUpperCase();
+    member.rank = newRank || member.rank;
+    member.discord = newDiscord.trim();
+
+    await saveData();
+    render();
+  }
+
+  // REMOVE MEMBER
+  if (btn.classList.contains("btn-remove")) {
+    if (confirm("Remove this member?")) {
+      members = members.filter(m => m.id !== memberId);
       await saveData();
       render();
     }
-
-    if (btn.classList.contains("btn-remove")) {
-      if (confirm("Remove this member?")) {
-        members = members.filter(m => m.id !== memberId);
-        await saveData();
-        render();
-      }
-    }
-  });
-
+  }
+})
+  
   btnSaveChanges.addEventListener("click", async () => {
     const newClanLevel = parseInt(clanLevelInput.value, 10) || clanLevel;
     const newMaxMembers = parseInt(maxMembersInput.value, 10) || maxMembers;
