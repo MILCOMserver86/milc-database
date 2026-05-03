@@ -694,7 +694,7 @@
 
   async function loadData() {
     try {
-      const res = await fetch(`${BACKEND_URL}/data`);
+      const res = await fetch(`${BACKEND_URL}data`);
       if (!res.ok) {
         console.warn("Backend returned non-OK status, using defaults.");
         return;
