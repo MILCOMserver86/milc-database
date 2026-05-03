@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <title>MILC DATABASE</title>
 
+  <!-- REQUIRED FOR MOBILE/TABLET LANDSCAPE SUPPORT -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     * {
       box-sizing: border-box;
@@ -17,6 +20,39 @@
       color: #e5e5e5;
       padding: 20px;
     }
+
+    /* -------------------------------
+       LANDSCAPE-ONLY MODE
+    --------------------------------*/
+    .rotate-message {
+      display: none;
+      text-align: center;
+      color: #e5e5e5;
+      font-size: 20px;
+      padding: 40px;
+    }
+
+    @media screen and (orientation: portrait) {
+      #appFrame {
+        display: none !important;
+      }
+      .rotate-message {
+        display: block !important;
+      }
+    }
+
+    @media screen and (orientation: landscape) {
+      #appFrame {
+        display: block !important;
+      }
+      .rotate-message {
+        display: none !important;
+      }
+    }
+
+    /* -------------------------------
+       ORIGINAL STYLES (UNCHANGED)
+    --------------------------------*/
 
     .app-frame {
       max-width: 1200px;
@@ -311,6 +347,7 @@
       color: #9ca8c6;
     }
 
+    /* ADMIN VISIBILITY */
     .admin-only { display: none; }
     .admin-only-flex { display: none; }
     .admin-only-block { display: none; }
@@ -346,28 +383,23 @@
       color: #9ca8c6;
     }
 
-    @media (max-width: 1024px) {
-      .panels {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* SIDE LOGO IMAGES */
+    /* SIDE LOGOS */
     .panels-wrapper {
       position: relative;
     }
 
     .side-logo {
-  position: absolute;
-  top: 38%;
-  width: 336px;
-  height: 386px;
-  object-fit: contain;
-  transform: translateY(-50%);
-  opacity: 0.9;
-  pointer-events: none;
-  filter: drop-shadow(0 0 12px #0af);
-}
+      position: absolute;
+      top: 38%;
+      width: 336px;
+      height: 386px;
+      object-fit: contain;
+      transform: translateY(-50%);
+      opacity: 0.9;
+      pointer-events: none;
+      filter: drop-shadow(0 0 12px #0af);
+    }
+
     .side-logo.left {
       left: -360px;
     }
@@ -380,6 +412,11 @@
 </head>
 
 <body>
+
+  <!-- PORTRAIT MODE MESSAGE -->
+  <div class="rotate-message">
+    Please rotate your device to landscape mode to view the MILC Database.
+  </div>
 
   <div class="app-frame" id="appFrame">
 
@@ -400,8 +437,8 @@
     <!-- WRAPPER + LOGOS -->
     <div class="panels-wrapper">
 
-<img src="images/milcom-logo.png" class="side-logo left">
-<img src="images/milcom-logo.png" class="side-logo right">
+      <img src="images/milcom-logo.png" class="side-logo left">
+      <img src="images/milcom-logo.png" class="side-logo right">
 
       <div class="panels">
 
@@ -532,7 +569,7 @@
 
               <button class="btn btn-primary btn-small" id="btnAddMember">Add Member</button>
             </div>
-          </div>
+                   </div> <!-- end admin-only-flex -->
 
           <div class="table-wrapper">
             <table>
@@ -567,452 +604,446 @@
 
           <div class="divider"></div>
 
-        <div>
-          <div class="rank-highlight">
-            <span id="clanRankDisplay">12</span>
-            <input type="number" id="clanRankInput" class="input-inline input-inline-number admin-only" min="1" value="12" />
-          </div>
-          <div class="rank-sub">Clan Ranking</div>
-        </div>
-
-        <div class="rank-stat-block">
-          <div class="stat-row">
-            <span class="stat-label">Total Power</span>
-            <span class="stat-value" id="totalPowerDisplayRight">0</span>
+          <div>
+            <div class="rank-highlight">
+              <span id="clanRankDisplay">12</span>
+              <input type="number" id="clanRankInput" class="input-inline input-inline-number admin-only" min="1" value="12" />
+            </div>
+            <div class="rank-sub">Clan Ranking</div>
           </div>
 
-          <div class="stat-row">
-            <span class="stat-label">Average Power</span>
-            <span class="stat-value" id="avgPowerDisplayRight">0</span>
+          <div class="rank-stat-block">
+            <div class="stat-row">
+              <span class="stat-label">Total Power</span>
+              <span class="stat-value" id="totalPowerDisplayRight">0</span>
+            </div>
+
+            <div class="stat-row">
+              <span class="stat-label">Average Power</span>
+              <span class="stat-value" id="avgPowerDisplayRight">0</span>
+            </div>
+
+            <div class="stat-row">
+              <span class="stat-label">Members Counted</span>
+              <span class="stat-value" id="membersCountedDisplay">0 / 0</span>
+            </div>
           </div>
 
-          <div class="stat-row">
-            <span class="stat-label">Members Counted</span>
-            <span class="stat-value" id="membersCountedDisplay">0 / 0</span>
+          <div class="rank-stat-block">
+            <div class="rank-label">Alliance Buffs Level</div>
+            <div class="rank-highlight" style="font-size:20px;">
+              <span id="allianceBuffDisplay">25</span>
+              <input type="number" id="allianceBuffInput" class="input-inline input-inline-number admin-only" min="0" value="25" />
+            </div>
           </div>
-        </div>
 
-        <div class="rank-stat-block">
-          <div class="rank-label">Alliance Buffs Level</div>
-          <div class="rank-highlight" style="font-size:20px;">
-            <span id="allianceBuffDisplay">25</span>
-            <input type="number" id="allianceBuffInput" class="input-inline input-inline-number admin-only" min="0" value="25" />
+          <div class="rank-updated" id="updatedStamp">
+            Updated: Stardate 2405.17
           </div>
-        </div>
 
-        <div class="rank-updated" id="updatedStamp">
-          Updated: Stardate 2405.17
-        </div>
+          <div class="admin-controls-row admin-only-flex">
+            <button class="btn btn-primary" id="btnSaveChanges">Save</button>
+          </div>
+        </section>
 
-        <div class="admin-controls-row admin-only-flex">
-          <button class="btn btn-primary" id="btnSaveChanges">Save</button>
-        </div>
-      </section>
+      </div> <!-- end .panels -->
+    </div> <!-- end .panels-wrapper -->
+  </div> <!-- end .app-frame -->
 
-    </div> <!-- end .panels -->
-  </div> <!-- end .panels-wrapper -->
-</div> <!-- end .app-frame -->
+  <script>
+    const ADMIRAL_PASSWORD = "noRto2-hysfyr-gotxus";
+    const BACKEND_URL = "https://milc-backend-pc5q.onrender.com/";
 
-<script>
-  const ADMIRAL_PASSWORD = "noRto2-hysfyr-gotxus";
-  const BACKEND_URL = "https://milc-backend-pc5q.onrender.com/";
+    const appFrame = document.getElementById("appFrame");
+    const adminStatus = document.getElementById("adminStatus");
+    const btnSignIn = document.getElementById("btnSignIn");
+    const btnSignOut = document.getElementById("btnSignOut");
 
-  const appFrame = document.getElementById("appFrame");
-  const adminStatus = document.getElementById("adminStatus");
-  const btnSignIn = document.getElementById("btnSignIn");
-  const btnSignOut = document.getElementById("btnSignOut");
+    const clanLevelDisplay = document.getElementById("clanLevelDisplay");
+    const clanLevelInput = document.getElementById("clanLevelInput");
+    const maxMembersInput = document.getElementById("maxMembersInput");
+    const membersDisplay = document.getElementById("membersDisplay");
+    const totalPowerDisplay = document.getElementById("totalPowerDisplay");
+    const avgPowerDisplay = document.getElementById("avgPowerDisplay");
 
-  const clanLevelDisplay = document.getElementById("clanLevelDisplay");
-  const clanLevelInput = document.getElementById("clanLevelInput");
-  const maxMembersInput = document.getElementById("maxMembersInput");
-  const membersDisplay = document.getElementById("membersDisplay");
-  const totalPowerDisplay = document.getElementById("totalPowerDisplay");
-  const avgPowerDisplay = document.getElementById("avgPowerDisplay");
+    const admiralName = document.getElementById("admiralName");
 
-  const admiralName = document.getElementById("admiralName");
+    const languageFilters = document.getElementById("languageFilters");
+    const langClr = document.getElementById("langClr");
 
-  const languageFilters = document.getElementById("languageFilters");
-  const langClr = document.getElementById("langClr");
+    const rosterBody = document.getElementById("rosterBody");
+    const membersCountLabel = document.getElementById("membersCountLabel");
+    const rosterFooterLeft = document.getElementById("rosterFooterLeft");
+    const rosterFooterRight = document.getElementById("rosterFooterRight");
 
-  const rosterBody = document.getElementById("rosterBody");
-  const membersCountLabel = document.getElementById("membersCountLabel");
-  const rosterFooterLeft = document.getElementById("rosterFooterLeft");
-  const rosterFooterRight = document.getElementById("rosterFooterRight");
+    const addName = document.getElementById("addName");
+    const addPower = document.getElementById("addPower");
+    const addOps = document.getElementById("addOps");
+    const addLang = document.getElementById("addLang");
+    const addRank = document.getElementById("addRank");
+    const addDiscord = document.getElementById("addDiscord");
+    const btnAddMember = document.getElementById("btnAddMember");
 
-  const addName = document.getElementById("addName");
-  const addPower = document.getElementById("addPower");
-  const addOps = document.getElementById("addOps");
-  const addLang = document.getElementById("addLang");
-  const addRank = document.getElementById("addRank");
-  const addDiscord = document.getElementById("addDiscord");
-  const btnAddMember = document.getElementById("btnAddMember");
+    const clanRankDisplay = document.getElementById("clanRankDisplay");
+    const clanRankInput = document.getElementById("clanRankInput");
+    const totalPowerDisplayRight = document.getElementById("totalPowerDisplayRight");
+    const avgPowerDisplayRight = document.getElementById("avgPowerDisplayRight");
+    const membersCountedDisplay = document.getElementById("membersCountedDisplay");
+    const allianceBuffDisplay = document.getElementById("allianceBuffDisplay");
+    const allianceBuffInput = document.getElementById("allianceBuffInput");
+    const updatedStamp = document.getElementById("updatedStamp");
+    const btnSaveChanges = document.getElementById("btnSaveChanges");
 
-  const clanRankDisplay = document.getElementById("clanRankDisplay");
-  const clanRankInput = document.getElementById("clanRankInput");
-  const totalPowerDisplayRight = document.getElementById("totalPowerDisplayRight");
-  const avgPowerDisplayRight = document.getElementById("avgPowerDisplayRight");
-  const membersCountedDisplay = document.getElementById("membersCountedDisplay");
-  const allianceBuffDisplay = document.getElementById("allianceBuffDisplay");
-  const allianceBuffInput = document.getElementById("allianceBuffInput");
-  const updatedStamp = document.getElementById("updatedStamp");
-  const btnSaveChanges = document.getElementById("btnSaveChanges");
+    let isAdmin = false;
 
-  let isAdmin = false;
+    let maxMembers = 0;
+    let clanLevel = 12;
+    let clanRank = 12;
+    let allianceBuffLevel = 25;
 
-  let maxMembers = 0;
-  let clanLevel = 12;
-  let clanRank = 12;
-  let allianceBuffLevel = 25;
+    let members = [];
+    let nextId = 1;
 
-  let members = [];
-  let nextId = 1;
+    let activeLangFilters = new Set();
 
-  let activeLangFilters = new Set();
+    // ---- BACKEND PERSISTENCE ----
+    async function saveData() {
+      const data = {
+        members,
+        nextId,
+        maxMembers,
+        clanLevel,
+        clanRank,
+        allianceBuffLevel
+      };
 
-  // ---- BACKEND PERSISTENCE ----
-  async function saveData() {
-    const data = {
-      members,
-      nextId,
-      maxMembers,
-      clanLevel,
-      clanRank,
-      allianceBuffLevel
-    };
-
-    try {
-      await fetch(`${BACKEND_URL}data`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-});
-    } catch (err) {
-      console.error("Error saving data to backend:", err);
-      alert("Warning: failed to save to server.");
-    }
-  }
-
-  async function loadData() {
-    try {
-      const res = await fetch(`${BACKEND_URL}data`);
-      if (!res.ok) {
-        console.warn("Backend returned non-OK status, using defaults.");
-        return;
+      try {
+        await fetch(`${BACKEND_URL}data`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+      } catch (err) {
+        console.error("Error saving data to backend:", err);
+        alert("Warning: failed to save to server.");
       }
-      const data = await res.json() || {};
-
-      members = Array.isArray(data.members) ? data.members : [];
-      nextId = data.nextId || 1;
-      maxMembers = data.maxMembers || 0;
-      clanLevel = data.clanLevel || 12;
-      clanRank = data.clanRank || 12;
-      allianceBuffLevel = data.allianceBuffLevel || 25;
-    } catch (err) {
-      console.error("Error loading data from backend:", err);
-      // If backend fails, we just keep defaults
     }
-  }
 
-  function enforceSingleAdmiral(newAdmiralName) {
-    members.forEach(m => {
-      if (m.rank === "Admiral" && m.name !== newAdmiralName) {
-        m.rank = "Commodore";
+    async function loadData() {
+      try {
+        const res = await fetch(`${BACKEND_URL}data`);
+        if (!res.ok) {
+          console.warn("Backend returned non-OK status, using defaults.");
+          return;
+        }
+        const data = await res.json() || {};
+
+        members = Array.isArray(data.members) ? data.members : [];
+        nextId = data.nextId || 1;
+        maxMembers = data.maxMembers || 0;
+        clanLevel = data.clanLevel || 12;
+        clanRank = data.clanRank || 12;
+        allianceBuffLevel = data.allianceBuffLevel || 25;
+      } catch (err) {
+        console.error("Error loading data from backend:", err);
       }
-    });
-  }
-
-  function updateAdmiralDisplay() {
-    const adm = members.find(m => m.rank === "Admiral");
-    admiralName.textContent = adm ? adm.name : "None Assigned";
-  }
-
-  function setAdminMode(on) {
-    isAdmin = on;
-    if (on) {
-      appFrame.classList.add("admin-mode");
-      adminStatus.textContent = "Mode: Admiral";
-      btnSignIn.style.display = "none";
-      btnSignOut.style.display = "inline-flex";
-    } else {
-      appFrame.classList.remove("admin-mode");
-      adminStatus.textContent = "Mode: Viewer";
-      btnSignIn.style.display = "inline-flex";
-      btnSignOut.style.display = "none";
-    }
-    render();
-  }
-
-  const loginBox = document.createElement("div");
-  loginBox.innerHTML = `
-    <input type="password" id="passwordInput" class="input-inline input-inline-wide" placeholder="Enter password">
-    <button class="btn btn-primary btn-small" id="btnSubmitPassword">OK</button>
-  `;
-  loginBox.style.display = "none";
-
-  document.querySelector(".app-header-right").appendChild(loginBox);
-
-  const passwordInput = loginBox.querySelector("#passwordInput");
-  const btnSubmitPassword = loginBox.querySelector("#btnSubmitPassword");
-
-  btnSignIn.addEventListener("click", () => {
-    loginBox.style.display = "block";
-    passwordInput.focus();
-  });
-
-  btnSubmitPassword.addEventListener("click", handleLogin);
-  passwordInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") handleLogin();
-  });
-
-  function handleLogin() {
-    const pwd = passwordInput.value;
-
-    if (pwd === ADMIRAL_PASSWORD) {
-      setAdminMode(true);
-      loginBox.style.display = "none";
-      passwordInput.value = "";
-    } else {
-      alert("Incorrect password.");
-    }
-  }
-
-  btnSignOut.addEventListener("click", () => {
-    setAdminMode(false);
-  });
-
-  languageFilters.addEventListener("click", (e) => {
-    const badge = e.target.closest(".badge");
-    if (!badge) return;
-    const lang = badge.getAttribute("data-lang");
-    if (!lang) {
-      activeLangFilters.clear();
-      Array.from(languageFilters.querySelectorAll(".badge")).forEach(b => b.classList.remove("active"));
-      renderRoster();
-      return;
-    }
-    if (activeLangFilters.has(lang)) {
-      activeLangFilters.delete(lang);
-      badge.classList.remove("active");
-    } else {
-      activeLangFilters.add(lang);
-      badge.classList.add("active");
-    }
-    renderRoster();
-  });
-
-  btnAddMember.addEventListener("click", async () => {
-  console.log("Add Member clicked");
-
-  const name = (addName.value || "").trim();
-  const power = parseInt(addPower.value, 10) || 0;
-  const ops = parseInt(addOps.value, 10) || 0;
-  const lang = addLang.value || "EN";
-  const rank = addRank.value || "Agent";
-  const discord = (addDiscord.value || "").trim();
-
-  if (!name) {
-    alert("Username is required.");
-    return;
-  }
-  if (power < 0 || ops < 0) {
-    alert("Power and Ops must be non-negative.");
-    return;
-  }
-
-  if (rank === "Admiral") {
-    enforceSingleAdmiral(name);
-  }
-
-  members.push({
-    id: nextId++,
-    name,
-    power,
-    ops,
-    lang,
-    rank,
-    discord
-  });
-
-  console.log("Calling saveData()");
-  await saveData();
-
-  addName.value = "";
-  addPower.value = "";
-  addOps.value = "";
-  addDiscord.value = "";
-  addLang.value = "EN";
-  addRank.value = "Agent";
-
-  render();
-});
-
-
-// --- EDIT / REMOVE HANDLER ---
-rosterBody.addEventListener("click", async (e) => {
-  const btn = e.target;
-  const row = btn.closest("tr");
-  if (!row) return;
-
-  const memberId = parseInt(row.getAttribute("data-id"), 10);
-  const member = members.find(m => m.id === memberId);
-  if (!member) return;
-
-  // EDIT MEMBER
-  if (btn.classList.contains("btn-edit")) {
-    const newName = prompt("Username:", member.name);
-    if (newName === null) return;
-
-    const newPowerStr = prompt("Power:", member.power);
-    if (newPowerStr === null) return;
-
-    const newOpsStr = prompt("Ops:", member.ops);
-    if (newOpsStr === null) return;
-
-    const newLang = prompt("Lang (EN/FR/DE/ES):", member.lang);
-    if (newLang === null) return;
-
-    const newRank = prompt("Rank (Agent/Operative/Premier/Commodore/Admiral):", member.rank);
-    if (newRank === null) return;
-
-    const newDiscord = prompt("Discord:", member.discord);
-    if (newDiscord === null) return;
-
-    const newPower = parseInt(newPowerStr, 10);
-    const newOps = parseInt(newOpsStr, 10);
-    if (isNaN(newPower) || isNaN(newOps)) {
-      alert("Power and Ops must be numbers.");
-      return;
     }
 
-    if (newRank === "Admiral") {
-      enforceSingleAdmiral(newName.trim());
+    function enforceSingleAdmiral(newAdmiralName) {
+      members.forEach(m => {
+        if (m.rank === "Admiral" && m.name !== newAdmiralName) {
+          m.rank = "Commodore";
+        }
+      });
     }
 
-    member.name = newName.trim() || member.name;
-    member.power = newPower;
-    member.ops = newOps;
-    member.lang = (newLang || member.lang).toUpperCase();
-    member.rank = newRank || member.rank;
-    member.discord = newDiscord.trim();
+    function updateAdmiralDisplay() {
+      const adm = members.find(m => m.rank === "Admiral");
+      admiralName.textContent = adm ? adm.name : "None Assigned";
+    }
 
-    await saveData();
-    render();
-  }
-
-  // REMOVE MEMBER
-  if (btn.classList.contains("btn-remove")) {
-    if (confirm("Remove this member?")) {
-      members = members.filter(m => m.id !== memberId);
-      await saveData();
+    function setAdminMode(on) {
+      isAdmin = on;
+      if (on) {
+        appFrame.classList.add("admin-mode");
+        adminStatus.textContent = "Mode: Admiral";
+        btnSignIn.style.display = "none";
+        btnSignOut.style.display = "inline-flex";
+      } else {
+        appFrame.classList.remove("admin-mode");
+        adminStatus.textContent = "Mode: Viewer";
+        btnSignIn.style.display = "inline-flex";
+        btnSignOut.style.display = "none";
+      }
       render();
     }
-  }
-})
-  
-  btnSaveChanges.addEventListener("click", async () => {
-    const newClanLevel = parseInt(clanLevelInput.value, 10) || clanLevel;
-    const newMaxMembers = parseInt(maxMembersInput.value, 10) || maxMembers;
-    const newRank = parseInt(clanRankInput.value, 10) || clanRank;
-    const newBuff = parseInt(allianceBuffInput.value, 10) || allianceBuffLevel;
 
-    if (newMaxMembers < members.length) {
-      if (!confirm("Max members is less than current members. Keep anyway?")) {
-        return;
+    const loginBox = document.createElement("div");
+    loginBox.innerHTML = `
+      <input type="password" id="passwordInput" class="input-inline input-inline-wide" placeholder="Enter password">
+      <button class="btn btn-primary btn-small" id="btnSubmitPassword">OK</button>
+    `;
+    loginBox.style.display = "none";
+
+    document.querySelector(".app-header-right").appendChild(loginBox);
+
+    const passwordInput = loginBox.querySelector("#passwordInput");
+    const btnSubmitPassword = loginBox.querySelector("#btnSubmitPassword");
+
+    btnSignIn.addEventListener("click", () => {
+      loginBox.style.display = "block";
+      passwordInput.focus();
+    });
+
+    btnSubmitPassword.addEventListener("click", handleLogin);
+    passwordInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") handleLogin();
+    });
+
+    function handleLogin() {
+      const pwd = passwordInput.value;
+
+      if (pwd === ADMIRAL_PASSWORD) {
+        setAdminMode(true);
+        loginBox.style.display = "none";
+        passwordInput.value = "";
+      } else {
+        alert("Incorrect password.");
       }
     }
 
-    clanLevel = newClanLevel;
-    maxMembers = newMaxMembers;
-    clanRank = newRank;
-    allianceBuffLevel = newBuff;
+    btnSignOut.addEventListener("click", () => {
+      setAdminMode(false);
+    });
 
-    await saveData();
+    languageFilters.addEventListener("click", (e) => {
+      const badge = e.target.closest(".badge");
+      if (!badge) return;
+      const lang = badge.getAttribute("data-lang");
+      if (!lang) {
+        activeLangFilters.clear();
+        Array.from(languageFilters.querySelectorAll(".badge")).forEach(b => b.classList.remove("active"));
+        renderRoster();
+        return;
+      }
+      if (activeLangFilters.has(lang)) {
+        activeLangFilters.delete(lang);
+        badge.classList.remove("active");
+      } else {
+        activeLangFilters.add(lang);
+        badge.classList.add("active");
+      }
+      renderRoster();
+    });
 
-    const now = new Date();
-    const stardate = `Stardate ${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
-    updatedStamp.textContent = "Updated: " + stardate;
+    btnAddMember.addEventListener("click", async () => {
+      const name = (addName.value || "").trim();
+      const power = parseInt(addPower.value, 10) || 0;
+      const ops = parseInt(addOps.value, 10) || 0;
+      const lang = addLang.value || "EN";
+      const rank = addRank.value || "Agent";
+      const discord = (addDiscord.value || "").trim();
 
-    render();
-    alert("Changes saved.");
-  });
+      if (!name) {
+        alert("Username is required.");
+        return;
+      }
+      if (power < 0 || ops < 0) {
+        alert("Power and Ops must be non-negative.");
+        return;
+      }
 
-  function computeStats() {
-    const memberCount = members.length;
-    const totalPower = members.reduce((sum, m) => sum + (m.power || 0), 0);
-    const avgPower = memberCount > 0 ? Math.round(totalPower / memberCount) : 0;
-    return { memberCount, totalPower, avgPower };
-  }
+      if (rank === "Admiral") {
+        enforceSingleAdmiral(name);
+      }
 
-  function renderRoster() {
-    const { memberCount, totalPower, avgPower } = computeStats();
-
-    let filtered = members;
-    if (activeLangFilters.size > 0) {
-      filtered = members.filter(m => {
-        return Array.from(activeLangFilters).some(lang =>
-          m.lang.includes(lang)
-        );
+      members.push({
+        id: nextId++,
+        name,
+        power,
+        ops,
+        lang,
+        rank,
+        discord
       });
+
+      await saveData();
+
+      addName.value = "";
+      addPower.value = "";
+      addOps.value = "";
+      addDiscord.value = "";
+      addLang.value = "EN";
+      addRank.value = "Agent";
+
+      render();
+    });
+
+    // --- EDIT / REMOVE HANDLER ---
+    rosterBody.addEventListener("click", async (e) => {
+      const btn = e.target;
+      const row = btn.closest("tr");
+      if (!row) return;
+
+      const memberId = parseInt(row.getAttribute("data-id"), 10);
+      const member = members.find(m => m.id === memberId);
+      if (!member) return;
+
+      // EDIT MEMBER
+      if (btn.classList.contains("btn-edit")) {
+        const newName = prompt("Username:", member.name);
+        if (newName === null) return;
+
+        const newPowerStr = prompt("Power:", member.power);
+        if (newPowerStr === null) return;
+
+        const newOpsStr = prompt("Ops:", member.ops);
+        if (newOpsStr === null) return;
+
+        const newLang = prompt("Lang (EN/FR/DE/ES):", member.lang);
+        if (newLang === null) return;
+
+        const newRank = prompt("Rank (Agent/Operative/Premier/Commodore/Admiral):", member.rank);
+        if (newRank === null) return;
+
+        const newDiscord = prompt("Discord:", member.discord);
+        if (newDiscord === null) return;
+
+        const newPower = parseInt(newPowerStr, 10);
+        const newOps = parseInt(newOpsStr, 10);
+        if (isNaN(newPower) || isNaN(newOps)) {
+          alert("Power and Ops must be numbers.");
+          return;
+        }
+
+        if (newRank === "Admiral") {
+          enforceSingleAdmiral(newName.trim());
+        }
+
+        member.name = newName.trim() || member.name;
+        member.power = newPower;
+        member.ops = newOps;
+        member.lang = (newLang || member.lang).toUpperCase();
+        member.rank = newRank || member.rank;
+        member.discord = newDiscord.trim();
+
+        await saveData();
+        render();
+      }
+
+      // REMOVE MEMBER
+      if (btn.classList.contains("btn-remove")) {
+        if (confirm("Remove this member?")) {
+          members = members.filter(m => m.id !== memberId);
+          await saveData();
+          render();
+        }
+      }
+    });
+
+    btnSaveChanges.addEventListener("click", async () => {
+      const newClanLevel = parseInt(clanLevelInput.value, 10) || clanLevel;
+      const newMaxMembers = parseInt(maxMembersInput.value, 10) || maxMembers;
+      const newRank = parseInt(clanRankInput.value, 10) || clanRank;
+      const newBuff = parseInt(allianceBuffInput.value, 10) || allianceBuffLevel;
+
+      if (newMaxMembers < members.length) {
+        if (!confirm("Max members is less than current members. Keep anyway?")) {
+          return;
+        }
+      }
+
+      clanLevel = newClanLevel;
+      maxMembers = newMaxMembers;
+      clanRank = newRank;
+      allianceBuffLevel = newBuff;
+
+      await saveData();
+
+      const now = new Date();
+      const stardate = `Stardate ${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
+      updatedStamp.textContent = "Updated: " + stardate;
+
+      render();
+      alert("Changes saved.");
+    });
+
+    function computeStats() {
+      const memberCount = members.length;
+      const totalPower = members.reduce((sum, m) => sum + (m.power || 0), 0);
+      const avgPower = memberCount > 0 ? Math.round(totalPower / memberCount) : 0;
+      return { memberCount, totalPower, avgPower };
     }
 
-    rosterBody.innerHTML = "";
-    filtered
-      .slice()
-      .sort((a, b) => b.power - a.power)
-      .forEach((m, idx) => {
-        const tr = document.createElement("tr");
-        tr.setAttribute("data-id", m.id);
-        tr.innerHTML = `
-          <td class="col-rank">${idx + 1}</td>
-          <td class="col-name">${m.name}</td>
-          <td class="col-power">${m.power.toLocaleString()}</td>
-          <td class="col-ops">${m.ops}</td>
-          <td class="col-lang">${m.lang}</td>
-          <td class="col-role">${m.rank}</td>
-          <td class="col-discord">${m.discord}</td>
-          <td class="col-actions admin-only">
-            <button class="btn btn-small btn-edit">Edit</button>
-            <button class="btn btn-small btn-danger btn-remove">Del</button>
-          </td>
-        `;
-        rosterBody.appendChild(tr);
-      });
+    function renderRoster() {
+      const { memberCount, totalPower, avgPower } = computeStats();
 
-    membersCountLabel.textContent = memberCount.toString();
-    rosterFooterLeft.textContent = activeLangFilters.size > 0
-      ? "Filtered by language"
-      : "Showing all members";
-    rosterFooterRight.textContent = `Filtered: ${filtered.length}`;
+      let filtered = members;
+      if (activeLangFilters.size > 0) {
+        filtered = members.filter(m => {
+          return Array.from(activeLangFilters).some(lang =>
+            m.lang.includes(lang)
+          );
+        });
+      }
 
-    membersDisplay.textContent = `${memberCount} / ${maxMembers}`;
-    totalPowerDisplay.textContent = totalPower.toLocaleString();
-    avgPowerDisplay.textContent = avgPower.toLocaleString();
-    totalPowerDisplayRight.textContent = totalPower.toLocaleString();
-    avgPowerDisplayRight.textContent = avgPower.toLocaleString();
-    membersCountedDisplay.textContent = `${memberCount} / ${maxMembers}`;
+      rosterBody.innerHTML = "";
+      filtered
+        .slice()
+        .sort((a, b) => b.power - a.power)
+        .forEach((m, idx) => {
+          const tr = document.createElement("tr");
+          tr.setAttribute("data-id", m.id);
+          tr.innerHTML = `
+            <td class="col-rank">${idx + 1}</td>
+            <td class="col-name">${m.name}</td>
+            <td class="col-power">${m.power.toLocaleString()}</td>
+            <td class="col-ops">${m.ops}</td>
+            <td class="col-lang">${m.lang}</td>
+            <td class="col-role">${m.rank}</td>
+            <td class="col-discord">${m.discord}</td>
+            <td class="col-actions admin-only">
+              <button class="btn btn-small btn-edit">Edit</button>
+              <button class="btn btn-small btn-danger btn-remove">Del</button>
+            </td>
+          `;
+          rosterBody.appendChild(tr);
+        });
 
-    updateAdmiralDisplay();
-  }
+      membersCountLabel.textContent = memberCount.toString();
+      rosterFooterLeft.textContent = activeLangFilters.size > 0
+        ? "Filtered by language"
+        : "Showing all members";
+      rosterFooterRight.textContent = `Filtered: ${filtered.length}`;
 
-  function render() {
-    clanLevelDisplay.textContent = clanLevel;
-    clanLevelInput.value = clanLevel;
-    maxMembersInput.value = maxMembers;
-    clanRankDisplay.textContent = clanRank;
-    clanRankInput.value = clanRank;
-    allianceBuffDisplay.textContent = allianceBuffLevel;
-    allianceBuffInput.value = allianceBuffLevel;
+      membersDisplay.textContent = `${memberCount} / ${maxMembers}`;
+      totalPowerDisplay.textContent = totalPower.toLocaleString();
+      avgPowerDisplay.textContent = avgPower.toLocaleString();
+      totalPowerDisplayRight.textContent = totalPower.toLocaleString();
+      avgPowerDisplayRight.textContent = avgPower.toLocaleString();
+      membersCountedDisplay.textContent = `${memberCount} / ${maxMembers}`;
 
-    renderRoster();
-  }
+      updateAdmiralDisplay();
+    }
 
-  // Initial load from backend, then render
-  (async () => {
-    await loadData();
-    render();
-  })();
-</script>
+    function render() {
+      clanLevelDisplay.textContent = clanLevel;
+      clanLevelInput.value = clanLevel;
+      maxMembersInput.value = maxMembers;
+      clanRankDisplay.textContent = clanRank;
+      clanRankInput.value = clanRank;
+      allianceBuffDisplay.textContent = allianceBuffLevel;
+      allianceBuffInput.value = allianceBuffLevel;
 
+      renderRoster();
+    }
+
+    // Initial load from backend, then render
+    (async () => {
+      await loadData();
+      render();
+    })();
+  </script>
 
 </body>
 </html>
